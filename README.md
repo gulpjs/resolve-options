@@ -18,7 +18,7 @@ Resolve an options object based on configuration.
 
 ## API
 
-### `makeResolver(config, options)`
+### `createResolver(config, options)`
 
 ### `resolver.resolve(option, ...arguments)`
 
