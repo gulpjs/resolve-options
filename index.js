@@ -14,7 +14,8 @@ function createResolver(config, options) {
     resolve: resolve,
   };
 
-  var lastKey;
+  // Keep requested keys to detect (and disallow) recursive resolution
+  var stack = [];
 
   function resolve(key) {
     var appliedArgs = slice.call(arguments, 1);
@@ -25,29 +26,36 @@ function createResolver(config, options) {
       return;
     }
 
-    if (key === lastKey) {
+    if (stack.some(function(s) {
+      return s === key;
+    })) {
       throw new Error('Recursive resolution denied.');
     }
-    lastKey = key;
 
-    var option = options[key];
-    // Bind the option so it can resolve other options if necessary
-    if (typeof option === 'function') {
-      option = option.bind(resolver);
+    stack.push(key);
+    try {
+      var option = options[key];
+      // Bind the option so it can resolve other options if necessary
+      if (typeof option === 'function') {
+        option = option.bind(resolver);
+      }
+
+      var args = [definition.type, option].concat(appliedArgs);
+      var result = normalize.apply(null, args);
+
+      var fallback = definition.default;
+      // Bind & apply the default so it can resolve other options if necessary
+      if (typeof fallback === 'function') {
+        fallback = fallback.apply(resolver, appliedArgs);
+      }
+
+      stack.pop();
+      return koalas(result, fallback);
+
+    } catch (err) {
+      stack.pop();
+      throw err;
     }
-
-    var args = [definition.type, option].concat(appliedArgs);
-    var result = normalize.apply(null, args);
-
-    var fallback = definition.default;
-    // Bind & apply the default so it can resolve other options if necessary
-    if (typeof fallback === 'function') {
-      fallback = fallback.apply(resolver, appliedArgs);
-    }
-
-    lastKey = null;
-
-    return koalas(result, fallback);
   }
 
   return resolver;

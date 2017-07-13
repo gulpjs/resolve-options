@@ -211,7 +211,63 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not allow recursive resolution in options (to avoid blowing the stack)', function(done) {
+  it('allows non-recursive nested resolution of options', function(done) {
+    var config = {
+      myOpt1: {
+        type: 'string',
+      },
+      myOpt2: {
+        type: 'string',
+      },
+    };
+
+    var options = {
+      myOpt1: function() {
+        return 'hello ' + this.resolve('myOpt2');
+      },
+      myOpt2: 'world',
+    };
+
+    var resolver = createResolver(config, options);
+
+    var myOpt = resolver.resolve('myOpt1');
+    expect(myOpt).toEqual('hello world');
+
+    done();
+  });
+
+  it('allows non-recursive deeply nested resolution of options', function(done) {
+    var config = {
+      myOpt1: {
+        type: 'string',
+      },
+      myOpt2: {
+        type: 'string',
+      },
+      myOpt3: {
+        type: 'string',
+      },
+    };
+
+    var options = {
+      myOpt1: function() {
+        return 'hello' + this.resolve('myOpt2');
+      },
+      myOpt2: function() {
+        return ' ' + this.resolve('myOpt3');
+      },
+      myOpt3: 'world',
+    };
+
+    var resolver = createResolver(config, options);
+
+    var myOpt = resolver.resolve('myOpt1');
+    expect(myOpt).toEqual('hello world');
+
+    done();
+  });
+
+  it('does not allow recursive resolution of options (to avoid blowing the stack)', function(done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -410,6 +466,33 @@ describe('resolver.resolve', function() {
 
     function recursive() {
       resolver.resolve('myOpt');
+    }
+
+    expect(recursive).toThrow('Recursive resolution denied.');
+
+    done();
+  });
+
+  it('does not allow indirectly recursive resolution in defaults (to avoid blowing the stack)', function(done) {
+    var config = {
+      myOpt1: {
+        type: 'string',
+        default: function() {
+          return this.resolve('myOpt2');
+        },
+      },
+      myOpt2: {
+        type: 'string',
+        default: function() {
+          return this.resolve('myOpt1');
+        },
+      },
+    };
+
+    var resolver = createResolver(config);
+
+    function recursive() {
+      resolver.resolve('myOpt1');
     }
 
     expect(recursive).toThrow('Recursive resolution denied.');
