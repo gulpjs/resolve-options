@@ -17,10 +17,6 @@ function createResolver(config, options) {
   var lastKey;
 
   function resolve(key) {
-    if (typeof key !== 'string') {
-      return;
-    }
-
     var appliedArgs = slice.call(arguments, 1);
 
     var definition = config[key];
