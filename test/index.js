@@ -236,6 +236,38 @@ describe('resolver.resolve', function() {
     done();
   });
 
+  it('does not allow indirectly recursive resolution (to avoid blowing the stack)', function(done) {
+    var config = {
+      myOpt1: {
+        type: 'string',
+        default: 'hello world',
+      },
+      myOpt2: {
+        type: 'string',
+        default: 'bye bye',
+      },
+    };
+
+    var options = {
+      myOpt1: function() {
+        return this.resolve('myOpt2');
+      },
+      myOpt2: function() {
+        return this.resolve('myOpt1');
+      },
+    };
+
+    var resolver = createResolver(config, options);
+
+    function recursive() {
+      resolver.resolve('myOpt1');
+    }
+
+    expect(recursive).toThrow('Recursive resolution denied.');
+
+    done();
+  });
+
   it('supports custom type resolution with functions', function(done) {
     var now = new Date();
 
