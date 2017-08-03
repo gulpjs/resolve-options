@@ -31,9 +31,7 @@ function createResolver(config, options) {
       return;
     }
 
-    if (stack.some(function(s) {
-      return s === key;
-    })) {
+    if (stack.indexOf(key) >= 0) {
       throw new Error('Recursive resolution denied.');
     }
 
@@ -46,22 +44,20 @@ function createResolver(config, options) {
       if (typeof option === 'function') {
         option = normalize.apply(resolver, args);
       } else {
-        option = undefined;
+        option = null;
       }
 
-      if (option === undefined) {
+      if (option == null) {
         option = definition.default;
         if (typeof option === 'function') {
           option = option.apply(resolver, appliedArgs);
         }
       }
 
-      stack.pop();
       return option;
 
-    } catch (err) {
+    } finally {
       stack.pop();
-      throw err;
     }
   }
 
@@ -75,7 +71,7 @@ function createResolver(config, options) {
     if (!!option || options.hasOwnProperty(key)) {
       if (typeof option !== 'function') {
         option = normalize.call(resolver, definition.type, option);
-        if (option !== undefined) {
+        if (option != null) {
           constants[key] = option;
           return opts;
         }
