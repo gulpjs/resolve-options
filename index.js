@@ -10,7 +10,6 @@ function createResolver(config, options) {
   options = options || {};
 
   var resolver = {
-    resolveConstant: resolveConstant,
     resolve: resolve,
   };
 
