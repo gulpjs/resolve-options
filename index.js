@@ -70,18 +70,22 @@ function createResolver(config, options) {
       throw new Error('Recursive resolution denied.');
     }
 
-    stack.push(key);
-    try {
-      option = options[key];
-      var appliedArgs = slice.call(arguments, 1);
-      var args = [definition.type, option].concat(appliedArgs);
+    option = options[key];
+    var fallback = definition.default;
+    var appliedArgs = slice.call(arguments, 1);
+    var args = [definition.type, option].concat(appliedArgs);
 
-      if (typeof option === 'function') {
-        option = normalize.apply(resolver, args);
-      }
+    stack.push(key);
+    return tryResolve(option, fallback, appliedArgs, args);
+  }
+
+
+  function tryResolve(option, fallback, appliedArgs, args) {
+    try {
+      option = normalize.apply(resolver, args);
 
       if (option == null) {
-        option = definition.default;
+        option = fallback;
         if (typeof option === 'function') {
           option = option.apply(resolver, appliedArgs);
         }
