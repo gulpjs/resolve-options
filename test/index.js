@@ -53,6 +53,38 @@ describe('createResolver', function() {
 
     done();
   });
+
+  it('coerces just once for constant options', function(done) {
+    var coerced = 0;
+    var config = {
+      myOpt: {
+        type: function(value) {
+          coerced++;
+          return value;
+        },
+        default: 'bye bye',
+      },
+    };
+
+    var options = {
+      myOpt: 'hello world',
+    };
+
+    var resolver = createResolver(config, options);
+
+    expect(resolver).toExist();
+    expect(coerced).toBe(0);
+
+    var myOpt1 = resolver.resolve('myOpt');
+    expect(myOpt1).toEqual('hello world');
+    expect(coerced).toBe(1);
+
+    var myOpt2 = resolver.resolve('myOpt');
+    expect(myOpt2).toEqual('hello world');
+    expect(coerced).toBe(1);
+
+    done();
+  });
 });
 
 describe('resolver.resolve', function() {
