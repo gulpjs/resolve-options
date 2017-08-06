@@ -1,6 +1,5 @@
 'use strict';
 
-var koalas = require('koalas');
 var normalize = require('value-or-function');
 
 var slice = Array.prototype.slice;
@@ -51,7 +50,10 @@ function createResolver(config, options) {
 
     lastKey = null;
 
-    return koalas(result, fallback);
+    if (result == null) {
+      return fallback;
+    }
+    return result;
   }
 
   return resolver;
