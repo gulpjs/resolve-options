@@ -31,15 +31,13 @@ function createResolver(config, options) {
     var option = options[key];
 
     if (!!option || options.hasOwnProperty(key)) {
-      if (typeof option !== 'function') {
-        option = normalize.call(resolver, definition.type, option);
-        if (option != null) {
-          constants[key] = option;
-          return option;
-        }
-        // Fall through
-      } else {
+      if (typeof option === 'function') {
         return;
+      }
+      option = normalize.call(resolver, definition.type, option);
+      if (option != null) {
+        constants[key] = option;
+        return option;
       }
     }
 
@@ -75,14 +73,9 @@ function createResolver(config, options) {
     var appliedArgs = slice.call(arguments, 1);
     var args = [definition.type, option].concat(appliedArgs);
 
-    stack.push(key);
-    return tryResolve(option, fallback, appliedArgs, args);
-  }
-
-
-  function tryResolve(option, fallback, appliedArgs, args) {
-    try {
-      option = normalize.apply(resolver, args);
+    function toResolve() {
+      stack.push(key);
+      var option = normalize.apply(resolver, args);
 
       if (option == null) {
         option = fallback;
@@ -92,13 +85,27 @@ function createResolver(config, options) {
       }
 
       return option;
+    }
 
-    } finally {
+    function onResolve() {
       stack.pop();
     }
+
+    return tryResolve(toResolve, onResolve);
   }
+
 
   return resolver;
 }
+
+
+function tryResolve(toResolve, onResolve) {
+  try {
+    return toResolve();
+  } finally {
+    onResolve();
+  }
+}
+
 
 module.exports = createResolver;
