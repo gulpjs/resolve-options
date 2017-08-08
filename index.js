@@ -30,7 +30,7 @@ function createResolver(config, options) {
 
     var option = options[key];
 
-    if (!!option || options.hasOwnProperty(key)) {
+    if (option != null) {
       if (typeof option === 'function') {
         return;
       }
