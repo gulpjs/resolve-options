@@ -548,4 +548,96 @@ describe('resolver.resolve', function() {
 
     done();
   });
+
+  it('support nested options', function(done) {
+    var config = {
+      sourcemaps: {
+        children: {
+          includeContent: { type: 'boolean', default: true },
+          sourceRoot: { type: 'string' },
+          destPath: { type: 'string', default: '.' },
+          sourceMappingURL: { type: 'function' },
+          typeUnmatch: { type: 'string' },
+        },
+      },
+    };
+    function fn(file) {
+      return 'https://asset-host.example.com/' + file.relative + '.map';
+    }
+    var options = {
+      sourcemaps: {
+        includeContent: false,
+        sourceRoot: '../src',
+        destPath: './dest',
+        sourceMappingURL: fn,
+        typeUnmatch: 123,
+        nonExistent: 'x',
+      },
+    };
+
+    var resolver = createResolver(config, options);
+    expect(resolver.resolve('sourcemaps')).toEqual({
+      includeContent: false,
+      sourceRoot: '../src',
+      destPath: './dest',
+      sourceMappingURL: fn,
+      typeUnmatch: undefined,
+      nonExistent: undefined,
+    });
+    done();
+  });
+
+  it('support multi-type nested options', function(done) {
+    var config = {
+      sourcemaps: {
+        type: ['boolean', 'string'],
+        children: {
+          includeContent: { type: 'boolean', default: true },
+          sourceRoot: { type: 'string' },
+          typeUnmatch: 'string',
+        },
+      },
+    };
+
+    var resolver;
+
+    resolver = createResolver(config, {
+      sourcemaps: {
+        includeContent: false,
+        sourceRoot: '../src',
+        typeUnmatch: 123,
+        nonExistent: 'x',
+      },
+    });
+    expect(resolver.resolve('sourcemaps')).toEqual({
+      includeContent: false,
+      sourceRoot: '../src',
+      typeUnmatch: undefined,
+      nonExistent: undefined,
+    });
+
+    resolver = createResolver(config, {
+      sourcemaps: true,
+    });
+    expect(resolver.resolve('sourcemaps')).toEqual(true);
+
+    resolver = createResolver(config, {
+      sourcemaps: 'ABC',
+    });
+    expect(resolver.resolve('sourcemaps')).toEqual('ABC');
+
+    resolver = createResolver(config, {
+      sourcemaps: 123,
+    });
+    expect(resolver.resolve('sourcemaps')).toEqual(undefined);
+
+    var fn = function() {
+      return 1;
+    };
+    resolver = createResolver(config, {
+      sourcemaps: fn,
+    });
+    expect(resolver.resolve('sourcemaps')).toEqual(undefined);
+    done();
+  });
 });

@@ -17,7 +17,7 @@ function createResolver(config, options) {
   // Keep constants separately
   var constants = {};
 
-  function resolveConstant(key) {
+  function resolveConstant(config, options, key, isChild) {
     if (constants.hasOwnProperty(key)) {
       return constants[key];
     }
@@ -30,8 +30,21 @@ function createResolver(config, options) {
 
     var option = options[key];
 
+    var children = definition.children;
+    if (children && typeof children === 'object') {
+      if (option != null && typeof option === 'object') {
+        return Object.keys(option).reduce(function(obj, childKey) {
+          obj[childKey] = resolveConstant(children, option, childKey, true);
+          return obj;
+        }, {});
+      }
+    }
+    if (!definition.type) {
+      return;
+    }
+
     if (option != null) {
-      if (typeof option === 'function') {
+      if (!isChild && typeof option === 'function') {
         return;
       }
       option = normalize.call(resolver, definition.type, option);
@@ -53,7 +66,7 @@ function createResolver(config, options) {
   var stack = [];
 
   function resolve(key) {
-    var option = resolveConstant(key);
+    var option = resolveConstant(config, options, key);
     if (option != null) {
       return option;
     }
