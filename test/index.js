@@ -9,7 +9,7 @@ describe('createResolver', function() {
   it('does not need a config or options object', function(done) {
     var resolver = createResolver();
 
-    expect(resolver).toExist();
+    expect(resolver).toBeTruthy();
 
     done();
   });
@@ -17,7 +17,7 @@ describe('createResolver', function() {
   it('returns a resolver that contains a `resolve` method', function(done) {
     var resolver = createResolver();
 
-    expect(resolver.resolve).toBeA('function');
+    expect(typeof resolver.resolve).toEqual('function');
 
     done();
   });
@@ -32,7 +32,7 @@ describe('createResolver', function() {
 
     var resolver = createResolver(config);
 
-    expect(resolver).toExist();
+    expect(resolver).toBeTruthy();
 
     done();
   });
@@ -49,7 +49,7 @@ describe('createResolver', function() {
 
     var resolver = createResolver(config, options);
 
-    expect(resolver).toExist();
+    expect(resolver).toBeTruthy();
 
     done();
   });
@@ -72,7 +72,7 @@ describe('createResolver', function() {
 
     var resolver = createResolver(config, options);
 
-    expect(resolver).toExist();
+    expect(resolver).toBeTruthy();
     expect(coerced).toBe(0);
 
     var myOpt1 = resolver.resolve('myOpt');
