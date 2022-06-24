@@ -13,7 +13,6 @@ function createResolver(config, options) {
     resolve: resolve,
   };
 
-
   // Keep constants separately
   var constants = {};
 
@@ -47,7 +46,6 @@ function createResolver(config, options) {
       return fallback;
     }
   }
-
 
   // Keep requested keys to detect (and disallow) recursive resolution
   var stack = [];
@@ -94,10 +92,8 @@ function createResolver(config, options) {
     return tryResolve(toResolve, onResolve);
   }
 
-
   return resolver;
 }
-
 
 function tryResolve(toResolve, onResolve) {
   try {
@@ -106,6 +102,5 @@ function tryResolve(toResolve, onResolve) {
     onResolve();
   }
 }
-
 
 module.exports = createResolver;

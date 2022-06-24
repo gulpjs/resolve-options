@@ -20,26 +20,26 @@ var createResolver = require('resolve-options');
 var config = {
   cwd: {
     type: 'string',
-    default: process.cwd
+    default: process.cwd,
   },
   sourcemaps: {
     type: 'boolean',
-    default: false
+    default: false,
   },
   since: {
-    type: ['date', 'number']
+    type: ['date', 'number'],
   },
   read: {
-    type: 'boolean'
-  }
+    type: 'boolean',
+  },
 };
 
 var options = {
   sourcemaps: true,
   since: Date.now(),
-  read: function(file) {
-    return (file.extname !== '.mp4');
-  }
+  read: function (file) {
+    return file.extname !== '.mp4';
+  },
 };
 
 var resolver = createResolver(config, options);
@@ -62,6 +62,7 @@ var read = resolver.resolve('read', file);
 Takes a `config` object that describes the options to accept/resolve and an `options` object (usually passed by a user) to resolve against the `config`. Returns a `resolver` that contains a `resolve` method for realtime resolution of options.
 
 The `config` object takes the following structure:
+
 ```graphql
 config {
   [optionKey] {
@@ -75,7 +76,7 @@ Each option is represented by its `optionKey` in the `config` object. It must be
 
 The `type` property must be a string, array or function which will be passed to the [`value-or-function`][value-or-function] module (functions will be bound to the resolver to allow for dependent options).
 
-A `default` property may also be specified as a fallback if the option isn't available or is invalid. The `default` value can be any value or a function (functions will be bound to the resolver to allow for dependent defaults). __Note:__ `default` values are not type-validated by the `value-or-function` module.
+A `default` property may also be specified as a fallback if the option isn't available or is invalid. The `default` value can be any value or a function (functions will be bound to the resolver to allow for dependent defaults). **Note:** `default` values are not type-validated by the `value-or-function` module.
 
 ### `resolver.resolve(optionKey, [...arguments])`
 

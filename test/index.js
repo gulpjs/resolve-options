@@ -4,9 +4,8 @@ var expect = require('expect');
 
 var createResolver = require('../');
 
-describe('createResolver', function() {
-
-  it('does not need a config or options object', function(done) {
+describe('createResolver', function () {
+  it('does not need a config or options object', function (done) {
     var resolver = createResolver();
 
     expect(resolver).toBeTruthy();
@@ -14,7 +13,7 @@ describe('createResolver', function() {
     done();
   });
 
-  it('returns a resolver that contains a `resolve` method', function(done) {
+  it('returns a resolver that contains a `resolve` method', function (done) {
     var resolver = createResolver();
 
     expect(typeof resolver.resolve).toEqual('function');
@@ -22,7 +21,7 @@ describe('createResolver', function() {
     done();
   });
 
-  it('accepts a config object', function(done) {
+  it('accepts a config object', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -37,7 +36,7 @@ describe('createResolver', function() {
     done();
   });
 
-  it('accepts an options object', function(done) {
+  it('accepts an options object', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -54,11 +53,11 @@ describe('createResolver', function() {
     done();
   });
 
-  it('coerces just once for constant options', function(done) {
+  it('coerces just once for constant options', function (done) {
     var coerced = 0;
     var config = {
       myOpt: {
-        type: function(value) {
+        type: function (value) {
           coerced++;
           return value;
         },
@@ -87,9 +86,8 @@ describe('createResolver', function() {
   });
 });
 
-describe('resolver.resolve', function() {
-
-  it('takes a string key and returns a resolved option', function(done) {
+describe('resolver.resolve', function () {
+  it('takes a string key and returns a resolved option', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -106,7 +104,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('returns undefined if a string key is not given', function(done) {
+  it('returns undefined if a string key is not given', function (done) {
     var resolver = createResolver();
 
     var myOpt = resolver.resolve({});
@@ -116,7 +114,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('returns undefined if the key is not defined in the config object', function(done) {
+  it('returns undefined if the key is not defined in the config object', function (done) {
     var resolver = createResolver();
 
     var myOpt = resolver.resolve('myOpt');
@@ -126,7 +124,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('resolves values against the defined type', function(done) {
+  it('resolves values against the defined type', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -157,7 +155,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('resolves options that are given as a function, validating the return type', function(done) {
+  it('resolves options that are given as a function, validating the return type', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -166,7 +164,7 @@ describe('resolver.resolve', function() {
     };
 
     var validOptions = {
-      myOpt: function() {
+      myOpt: function () {
         return 'foo';
       },
     };
@@ -178,7 +176,7 @@ describe('resolver.resolve', function() {
     expect(validOpt).toEqual('foo');
 
     var invalidOptions = {
-      myOpt: function() {
+      myOpt: function () {
         return 123;
       },
     };
@@ -192,7 +190,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('forwards extra arguments to an option function', function(done) {
+  it('forwards extra arguments to an option function', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -201,7 +199,7 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt: function(arg1, arg2) {
+      myOpt: function (arg1, arg2) {
         expect(arg1).toEqual('arg1');
         expect(arg2).toEqual('arg2');
         return arg2;
@@ -217,7 +215,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('binds the resolver to an option function', function(done) {
+  it('binds the resolver to an option function', function (done) {
     var resolver;
 
     var config = {
@@ -228,7 +226,7 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt: function() {
+      myOpt: function () {
         expect(this).toBe(resolver);
         return 'foo';
       },
@@ -243,7 +241,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('allows non-recursive nested resolution of options', function(done) {
+  it('allows non-recursive nested resolution of options', function (done) {
     var config = {
       myOpt1: {
         type: 'string',
@@ -254,7 +252,7 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt1: function() {
+      myOpt1: function () {
         return 'hello ' + this.resolve('myOpt2');
       },
       myOpt2: 'world',
@@ -268,7 +266,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('allows non-recursive deeply nested resolution of options', function(done) {
+  it('allows non-recursive deeply nested resolution of options', function (done) {
     var config = {
       myOpt1: {
         type: 'string',
@@ -282,10 +280,10 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt1: function() {
+      myOpt1: function () {
         return 'hello' + this.resolve('myOpt2');
       },
-      myOpt2: function() {
+      myOpt2: function () {
         return ' ' + this.resolve('myOpt3');
       },
       myOpt3: 'world',
@@ -299,7 +297,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not allow recursive resolution of options (to avoid blowing the stack)', function(done) {
+  it('does not allow recursive resolution of options (to avoid blowing the stack)', function (done) {
     var config = {
       myOpt: {
         type: 'string',
@@ -308,7 +306,7 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt: function() {
+      myOpt: function () {
         return this.resolve('myOpt');
       },
     };
@@ -324,7 +322,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not allow indirectly recursive resolution (to avoid blowing the stack)', function(done) {
+  it('does not allow indirectly recursive resolution (to avoid blowing the stack)', function (done) {
     var config = {
       myOpt1: {
         type: 'string',
@@ -337,10 +335,10 @@ describe('resolver.resolve', function() {
     };
 
     var options = {
-      myOpt1: function() {
+      myOpt1: function () {
         return this.resolve('myOpt2');
       },
-      myOpt2: function() {
+      myOpt2: function () {
         return this.resolve('myOpt1');
       },
     };
@@ -356,12 +354,12 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('supports custom type resolution with functions', function(done) {
+  it('supports custom type resolution with functions', function (done) {
     var now = new Date();
 
     var config = {
       myOpt: {
-        type: function(value) {
+        type: function (value) {
           return value.constructor === Date ? value : null;
         },
         default: 'hello world',
@@ -381,7 +379,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('supports arrays of types', function(done) {
+  it('supports arrays of types', function (done) {
     var config = {
       myOpt: {
         type: ['string', 'boolean'],
@@ -422,11 +420,11 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('allows functions as default values', function(done) {
+  it('allows functions as default values', function (done) {
     var config = {
       myOpt: {
         type: 'string',
-        default: function() {
+        default: function () {
           return 'hello world';
         },
       },
@@ -441,11 +439,11 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('forwards extra arguments to a default function', function(done) {
+  it('forwards extra arguments to a default function', function (done) {
     var config = {
       myOpt: {
         type: 'string',
-        default: function(arg1, arg2) {
+        default: function (arg1, arg2) {
           expect(arg1).toEqual('arg1');
           expect(arg2).toEqual('arg2');
           return arg2;
@@ -462,13 +460,13 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('binds the resolver to a default function', function(done) {
+  it('binds the resolver to a default function', function (done) {
     var resolver;
 
     var config = {
       myOpt: {
         type: 'string',
-        default: function() {
+        default: function () {
           expect(this).toBe(resolver);
           return 'hello world';
         },
@@ -484,11 +482,11 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not allow recursive resolution in defaults (to avoid blowing the stack)', function(done) {
+  it('does not allow recursive resolution in defaults (to avoid blowing the stack)', function (done) {
     var config = {
       myOpt: {
         type: 'string',
-        default: function() {
+        default: function () {
           return this.resolve('myOpt');
         },
       },
@@ -505,17 +503,17 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not allow indirectly recursive resolution in defaults (to avoid blowing the stack)', function(done) {
+  it('does not allow indirectly recursive resolution in defaults (to avoid blowing the stack)', function (done) {
     var config = {
       myOpt1: {
         type: 'string',
-        default: function() {
+        default: function () {
           return this.resolve('myOpt2');
         },
       },
       myOpt2: {
         type: 'string',
-        default: function() {
+        default: function () {
           return this.resolve('myOpt1');
         },
       },
@@ -532,7 +530,7 @@ describe('resolver.resolve', function() {
     done();
   });
 
-  it('does not verify your default matches the type', function(done) {
+  it('does not verify your default matches the type', function (done) {
     var config = {
       myOpt: {
         type: 'string',
