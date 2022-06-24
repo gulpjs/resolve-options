@@ -18,7 +18,7 @@ function createResolver(config, options) {
   var constants = {};
 
   function resolveConstant(key) {
-    if (constants.hasOwnProperty(key)) {
+    if (Object.prototype.hasOwnProperty.call(constants, key)) {
       return constants[key];
     }
 

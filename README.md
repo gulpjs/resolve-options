@@ -1,12 +1,12 @@
 <p align="center">
-  <a href="http://gulpjs.com">
+  <a href="https://gulpjs.com">
     <img height="257" width="114" src="https://raw.githubusercontent.com/gulpjs/artwork/master/gulp-2x.png">
   </a>
 </p>
 
 # resolve-options
 
-[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][travis-image]][travis-url] [![AppVeyor Build Status][appveyor-image]][appveyor-url] [![Coveralls Status][coveralls-image]][coveralls-url] [![Gitter chat][gitter-image]][gitter-url]
+[![NPM version][npm-image]][npm-url] [![Downloads][downloads-image]][npm-url] [![Build Status][ci-image]][ci-url] [![Coveralls Status][coveralls-image]][coveralls-url]
 
 Resolve an options object based on configuration.
 
@@ -85,20 +85,18 @@ Takes an `optionKey` string and any number of `arguments` to apply if an option 
 
 MIT
 
-[value-or-function]: https://github.com/gulpjs/value-or-function
-
-[downloads-image]: http://img.shields.io/npm/dm/resolve-options.svg
+<!-- prettier-ignore-start -->
+[downloads-image]: https://img.shields.io/npm/dm/resolve-options.svg?style=flat-square
 [npm-url]: https://npmjs.com/package/resolve-options
-[npm-image]: http://img.shields.io/npm/v/resolve-options.svg
+[npm-image]: https://img.shields.io/npm/v/resolve-options.svg?style=flat-square
 
-[travis-url]: https://travis-ci.org/gulpjs/resolve-options
-[travis-image]: http://img.shields.io/travis/gulpjs/resolve-options.svg?label=travis-ci
-
-[appveyor-url]: https://ci.appveyor.com/project/gulpjs/resolve-options
-[appveyor-image]: https://img.shields.io/appveyor/ci/gulpjs/resolve-options.svg?label=appveyor
+[ci-url]: https://github.com/gulpjs/resolve-options/actions?query=workflow:dev
+[ci-image]: https://img.shields.io/github/workflow/status/gulpjs/resolve-options/dev?style=flat-square
 
 [coveralls-url]: https://coveralls.io/r/gulpjs/resolve-options
-[coveralls-image]: http://img.shields.io/coveralls/gulpjs/resolve-options/master.svg
+[coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve-options/master.svg?style=flat-square
+<!-- prettier-ignore-end -->
 
-[gitter-url]: https://gitter.im/gulpjs/gulp
-[gitter-image]: https://badges.gitter.im/gulpjs/gulp.png
+<!-- prettier-ignore-start -->
+[value-or-function]: https://github.com/gulpjs/value-or-function
+<!-- prettier-ignore-end -->
