@@ -21,6 +21,14 @@ describe('createResolver', function () {
     done();
   });
 
+  it('returns a resolver that contains a `resolveConstant` method', function (done) {
+    var resolver = createResolver();
+
+    expect(typeof resolver.resolveConstant).toEqual('function');
+
+    done();
+  });
+
   it('accepts a config object', function (done) {
     var config = {
       myOpt: {
@@ -541,6 +549,182 @@ describe('resolver.resolve', function () {
     var resolver = createResolver(config);
 
     var myOpt = resolver.resolve('myOpt');
+
+    expect(myOpt).toEqual(123);
+
+    done();
+  });
+});
+
+describe('resolver.resolveConstant', function () {
+  it('takes a string key and returns a resolved option', function (done) {
+    var config = {
+      myOpt: {
+        type: 'string',
+        default: 'hello world',
+      },
+    };
+
+    var resolver = createResolver(config);
+
+    var myOpt = resolver.resolveConstant('myOpt');
+
+    expect(myOpt).toEqual('hello world');
+
+    done();
+  });
+
+  it('returns undefined if a string key is not given', function (done) {
+    var resolver = createResolver();
+
+    var myOpt = resolver.resolveConstant({});
+
+    expect(myOpt).toEqual(undefined);
+
+    done();
+  });
+
+  it('returns undefined if the key is not defined in the config object', function (done) {
+    var resolver = createResolver();
+
+    var myOpt = resolver.resolveConstant('myOpt');
+
+    expect(myOpt).toEqual(undefined);
+
+    done();
+  });
+
+  it('resolves values against the defined type', function (done) {
+    var config = {
+      myOpt: {
+        type: 'string',
+        default: 'hello world',
+      },
+    };
+
+    var validOptions = {
+      myOpt: 'foo',
+    };
+
+    var validResolver = createResolver(config, validOptions);
+
+    var validOpt = validResolver.resolveConstant('myOpt');
+
+    expect(validOpt).toEqual('foo');
+
+    var invalidOptions = {
+      myOpt: 123,
+    };
+
+    var invalidResolver = createResolver(config, invalidOptions);
+
+    var invalidOpt = invalidResolver.resolve('myOpt');
+
+    expect(invalidOpt).toEqual('hello world');
+
+    done();
+  });
+
+  it('does not resolve options that are given as a function', function (done) {
+    var config = {
+      myOpt: {
+        type: 'string',
+        default: 'hello world',
+      },
+    };
+
+    var validOptions = {
+      myOpt: function () {
+        return 'foo';
+      },
+    };
+
+    var validResolver = createResolver(config, validOptions);
+
+    var validOpt = validResolver.resolveConstant('myOpt');
+
+    expect(validOpt).toEqual(undefined);
+
+    done();
+  });
+
+  it('supports custom type resolution with functions', function (done) {
+    var now = new Date();
+
+    var config = {
+      myOpt: {
+        type: function (value) {
+          return value.constructor === Date ? value : null;
+        },
+        default: 'hello world',
+      },
+    };
+
+    var options = {
+      myOpt: now,
+    };
+
+    var resolver = createResolver(config, options);
+
+    var myOpt = resolver.resolveConstant('myOpt');
+
+    expect(myOpt).toBe(now);
+
+    done();
+  });
+
+  it('supports arrays of types', function (done) {
+    var config = {
+      myOpt: {
+        type: ['string', 'boolean'],
+        default: false,
+      },
+    };
+
+    var strOptions = {
+      myOpt: 'foo',
+    };
+
+    var strResolver = createResolver(config, strOptions);
+
+    var strOpt = strResolver.resolveConstant('myOpt');
+
+    expect(strOpt).toEqual('foo');
+
+    var boolOptions = {
+      myOpt: true,
+    };
+
+    var boolResolver = createResolver(config, boolOptions);
+
+    var boolOpt = boolResolver.resolveConstant('myOpt');
+
+    expect(boolOpt).toEqual(true);
+
+    var invalidOptions = {
+      myOpt: 123,
+    };
+
+    var invalidResolver = createResolver(config, invalidOptions);
+
+    var invalidOpt = invalidResolver.resolveConstant('myOpt');
+
+    expect(invalidOpt).toEqual(false);
+
+    done();
+  });
+
+  it('does not verify your default matches the type', function (done) {
+    var config = {
+      myOpt: {
+        type: 'string',
+        default: 123,
+      },
+    };
+
+    var resolver = createResolver(config);
+
+    var myOpt = resolver.resolveConstant('myOpt');
 
     expect(myOpt).toEqual(123);
 

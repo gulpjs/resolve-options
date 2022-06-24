@@ -11,6 +11,7 @@ function createResolver(config, options) {
 
   var resolver = {
     resolve: resolve,
+    resolveConstant: resolveConstant,
   };
 
   // Keep constants separately

@@ -82,6 +82,10 @@ A `default` property may also be specified as a fallback if the option isn't ava
 
 Takes an `optionKey` string and any number of `arguments` to apply if an option is a function. Returns the resolved value for the `optionKey`.
 
+### `resolver.resolveConstant(optionKey)`
+
+Like `resolve`, but only returns a value if the option is constant (not a function).
+
 ## License
 
 MIT
