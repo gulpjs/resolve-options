@@ -24,7 +24,7 @@ describe('createResolver', function () {
   it('returns a resolver that contains a `resolveConstant` method', function (done) {
     var resolver = createResolver();
 
-    expect(resolver.resolveConstant).toBeA('function');
+    expect(typeof resolver.resolveConstant).toEqual('function');
 
     done();
   });
@@ -643,7 +643,7 @@ describe('resolver.resolveConstant', function () {
 
     var validOpt = validResolver.resolveConstant('myOpt');
 
-    expect(validOpt).toEqual(null);
+    expect(validOpt).toEqual(undefined);
 
     done();
   });
