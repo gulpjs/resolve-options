@@ -96,7 +96,7 @@ MIT
 [npm-image]: https://img.shields.io/npm/v/resolve-options.svg?style=flat-square
 
 [ci-url]: https://github.com/gulpjs/resolve-options/actions?query=workflow:dev
-[ci-image]: https://img.shields.io/github/workflow/status/gulpjs/resolve-options/dev?style=flat-square
+[ci-image]: https://img.shields.io/github/actions/workflow/status/gulpjs/resolve-options/dev.yml?branch=master&style=flat-square
 
 [coveralls-url]: https://coveralls.io/r/gulpjs/resolve-options
 [coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve-options/master.svg?style=flat-square
