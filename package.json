@@ -28,7 +28,6 @@
     "test": "nyc mocha --async-only"
   },
   "dependencies": {
-    "i": "^0.3.7",
     "value-or-function": "^4.0.0"
   },
   "devDependencies": {
