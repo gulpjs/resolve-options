@@ -111,3 +111,7 @@ MIT
 [coveralls-url]: https://coveralls.io/r/gulpjs/resolve_options
 [coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve_options/main.svg?style=flat-square
 <!-- prettier-ignore-end -->
+
+<!-- prettier-ignore-start -->
+[value-or-function]: https://github.com/gulpjs/value-or-function
+<!-- prettier-ignore-end -->
