@@ -105,11 +105,11 @@ MIT
 [npm-url]: https://npmjs.com/package/resolve-options
 [npm-image]: https://img.shields.io/npm/v/resolve-options.svg?style=flat-square
 
-[ci-url]: https://github.com/gulpjs/resolve_options/actions/workflows/dev.yml
-[ci-image]: https://img.shields.io/github/actions/workflow/status/gulpjs/resolve_options/dev.yml?style=flat-square
+[ci-url]: https://github.com/gulpjs/resolve-options/actions/workflows/dev.yml
+[ci-image]: https://img.shields.io/github/actions/workflow/status/gulpjs/resolve-options/dev.yml?style=flat-square
 
-[coveralls-url]: https://coveralls.io/r/gulpjs/resolve_options
-[coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve_options/main.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/gulpjs/resolve-options
+[coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve-options/main.svg?style=flat-square
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
