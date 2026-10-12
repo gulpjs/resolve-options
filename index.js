@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var normalize = require('value-or-function');
+var normalize = require("value-or-function");
 
 var slice = Array.prototype.slice;
 
@@ -31,7 +31,7 @@ function createResolver(config, options) {
     var option = options[key];
 
     if (option != null) {
-      if (typeof option === 'function') {
+      if (typeof option === "function") {
         return;
       }
       option = normalize.call(resolver, definition.type, option);
@@ -42,7 +42,7 @@ function createResolver(config, options) {
     }
 
     var fallback = definition.default;
-    if (option == null && typeof fallback !== 'function') {
+    if (option == null && typeof fallback !== "function") {
       constants[key] = fallback;
       return fallback;
     }
@@ -64,7 +64,7 @@ function createResolver(config, options) {
     }
 
     if (stack.indexOf(key) >= 0) {
-      throw new Error('Recursive resolution denied.');
+      throw new Error("Recursive resolution denied.");
     }
 
     option = options[key];
@@ -78,7 +78,7 @@ function createResolver(config, options) {
 
       if (option == null) {
         option = fallback;
-        if (typeof option === 'function') {
+        if (typeof option === "function") {
           option = option.apply(resolver, appliedArgs);
         }
       }

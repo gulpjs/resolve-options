@@ -15,22 +15,22 @@ Resolve an options object based on configuration.
 ```js
 // This example assumes a Vinyl file
 
-var createResolver = require('resolve-options');
+var createResolver = require("resolve-options");
 
 var config = {
   cwd: {
-    type: 'string',
+    type: "string",
     default: process.cwd,
   },
   sourcemaps: {
-    type: 'boolean',
+    type: "boolean",
     default: false,
   },
   since: {
-    type: ['date', 'number'],
+    type: ["date", "number"],
   },
   read: {
-    type: 'boolean',
+    type: "boolean",
   },
 };
 
@@ -38,19 +38,19 @@ var options = {
   sourcemaps: true,
   since: Date.now(),
   read: function (file) {
-    return file.extname !== '.mp4';
+    return file.extname !== ".mp4";
   },
 };
 
 var resolver = createResolver(config, options);
 
-var cwd = resolver.resolve('cwd', file);
+var cwd = resolver.resolve("cwd", file);
 // cwd === process.cwd()
 
-var sourcemaps = resolver.resolve('sourcemaps', file);
+var sourcemaps = resolver.resolve("sourcemaps", file);
 // sourcemaps === true
 
-var read = resolver.resolve('read', file);
+var read = resolver.resolve("read", file);
 // Given .mp4, read === false
 // Given .txt, read === true
 ```
@@ -86,6 +86,16 @@ Takes an `optionKey` string and any number of `arguments` to apply if an option 
 
 Like `resolve`, but only returns a value if the option is constant (not a function).
 
+## Strict No LLM / No AI Policy
+
+No LLMs for issues.
+
+No LLMs for patches / pull requests.
+
+No LLMs for comments on the bug tracker, including translation.
+
+English is encouraged, but not required. You are welcome to post in your native language and rely on others to have their own translation tools of choice to interpret your words.
+
 ## License
 
 MIT
@@ -95,11 +105,11 @@ MIT
 [npm-url]: https://npmjs.com/package/resolve-options
 [npm-image]: https://img.shields.io/npm/v/resolve-options.svg?style=flat-square
 
-[ci-url]: https://github.com/gulpjs/resolve-options/actions?query=workflow:dev
-[ci-image]: https://img.shields.io/github/actions/workflow/status/gulpjs/resolve-options/dev.yml?branch=master&style=flat-square
+[ci-url]: https://github.com/gulpjs/resolve-options/actions/workflows/dev.yml
+[ci-image]: https://img.shields.io/github/actions/workflow/status/gulpjs/resolve-options/dev.yml?style=flat-square
 
 [coveralls-url]: https://coveralls.io/r/gulpjs/resolve-options
-[coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve-options/master.svg?style=flat-square
+[coveralls-image]: https://img.shields.io/coveralls/gulpjs/resolve-options/main.svg?style=flat-square
 <!-- prettier-ignore-end -->
 
 <!-- prettier-ignore-start -->
